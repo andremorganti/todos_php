@@ -7,8 +7,9 @@ SET time_zone = "+00:00";
 
 CREATE TABLE IF NOT EXISTS `todos` ( 
   `id` int(11) NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `status` varchar(20) NOT NULL DEFAULT 'created'
+  `name` VARCHAR(255) NOT NULL,
+  `status` VARCHAR(20) NOT NULL DEFAULT 'created',
+  `creation_date` DATE NOT NULL DEFAULT (CURRENT_DATE)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 ALTER TABLE `todos`
