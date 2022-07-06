@@ -1,5 +1,7 @@
 <?php
 
+include 'controllers/TodosController.php';
+
 $url = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH); // extract the URL request by user
 
 switch($url)
@@ -9,11 +11,19 @@ switch($url)
     break;
 
     case '/todos':
-        echo 'lista todos';
+        TodosController::index();
+    break;
+
+    case '/todo':
+        TodosController::show();
     break;
 
     case '/todos/form':
-        echo 'formulário para salvar todos';
+        TodosController::form();
+    break;
+
+    case '/todos/edit':
+        TodosController::edit();
     break;
 
     default:
