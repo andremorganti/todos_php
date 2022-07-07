@@ -4,6 +4,11 @@ class TodosController
 {
     public static function index()
     {
+        include 'models/TodosModel.php';
+
+        $model = new TodosModel();
+        $model->getAllRows();
+
         include 'views/modules/todos/ListTodos.php';
     }   
 
@@ -19,17 +24,33 @@ class TodosController
 
     public static function edit()
     {
+
         include 'views/modules/todos/FormTodo.php';
     }
 
-    public static function update()
+    public static function save()
     {
-        include 'views/modules/todos/FormTodo.php';
+        include 'Models/TodosModel.php';
+
+        $model = new TodosModel();
+        $model->name = $_POST['name'];
+        $model->creation_date = $_POST['creation_date'];
+        $model->status = $_POST['status'];
+        
+        $model->save();
+
+        header('Location: /todos');
     }
 
     public static function delete()
     {
-        echo "Deleting";
+
+        include 'Models/TodosModel.php';
+        
+        $id = $_GET['id'];
+        $model->delete($id);
+
+        header('Location: /todos');
     }
 }
 ?>

@@ -4,6 +4,8 @@ include 'controllers/TodosController.php';
 
 $url = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH); // extract the URL request by user
 
+//echo "url: $url <br>";
+
 switch($url)
 {
     case '/':
@@ -22,11 +24,19 @@ switch($url)
         TodosController::form();
     break;
 
+    case '/todos/form/save':
+        TodosController::save();
+    break;
+
     case '/todos/edit':
         TodosController::edit();
     break;
 
+    case '/todos/delete':
+        TodosController::delete();
+    break;
+
     default:
-        echo "Erro 404";
+        echo "Erro 404 - Página não encontrrada!";
     break;
 }
