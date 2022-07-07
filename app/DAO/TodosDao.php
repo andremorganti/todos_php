@@ -45,7 +45,7 @@ class TodosDAO
 
     public function selectById($id)
     {
-        $sql = "SELECT * FROM todos WHERE id = ?";
+        $sql = "SELECT * FROM todos WHERE id = ? LIMIT 1";
         $stmt = $this->conn->prepare($sql);
         $stmt->bindValue(1, $id);
         $stmt->execute();

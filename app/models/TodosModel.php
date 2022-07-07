@@ -2,7 +2,10 @@
 
 class TodosModel
 {
-    public $id, $name, $status, $creation_date;
+    public $id = '';
+    public $name = '';
+    public $status = '';
+    public $creation_date = '';
 
     public $rows, $row;
 

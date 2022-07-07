@@ -12,21 +12,40 @@ class TodosController
         include 'views/modules/todos/ListTodos.php';
     }   
 
-    public static function form()
-    {
-        include 'views/modules/todos/FormTodo.php';
-    }
-
     public static function show()
     {
         include 'views/modules/todos/ShowTodo.php';
     }
 
-    public static function edit()
-    {
+    public static function new(){
+        include 'models/TodosModel.php';
+
+        $model = new TodosModel();
+        $model->id = '';
+        $model->name = '';
+        $model->creation_date = date("d/m/Y");
+        $model->status = '';
 
         include 'views/modules/todos/FormTodo.php';
     }
+
+    public static function edit()
+    {
+        include 'models/TodosModel.php';
+
+        $model = new TodosModel();
+        $model->getById($_GET['id']);
+
+        //$model = array_slice($model, 0, 1);
+        
+        include 'views/modules/todos/FormTodo.php';
+    }
+
+    public static function form()
+    {
+        include 'views/modules/todos/FormTodo.php';
+    }
+
 
     public static function save()
     {
@@ -46,6 +65,7 @@ class TodosController
     {
 
         include 'Models/TodosModel.php';
+        $model = new TodosModel();
         
         $id = $_GET['id'];
         $model->delete($id);
