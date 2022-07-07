@@ -1,0 +1,282 @@
+	############################################################################
+	# BLOQUEIA A ASSINATURA DO SERVIDOR
+	############################################################################
+		#---------------------------------------------
+		#
+		# httpd.conf 	: ServerTokens ProductOnly
+		# php.ini  		: expose_php = Off
+		#
+		#---------------------------------------------
+		Header unset X-Powered-By
+		ServerSignature Off
+		
+	############################################################################
+	# VARIÁVEIS DE AMBIENTE
+	############################################################################
+	# Para editar as variáveis de ambiente, editar "default-ssl.conf"
+
+	############################################################################
+	# BLOQUEIA LISTAGEM DE ARQUIVOS
+	############################################################################
+		Options All -Indexes
+
+	############################################################################
+	# BLOQUEIA ACESSO POR METODO
+	############################################################################
+		RewriteCond 	%{REQUEST_METHOD} ^(RMDIR|MKDIR|INDEX|MOVE|TRACE|DELETE|TRACK|PUT|HEAD|OPTIONS|CONNECT)
+  		RewriteRule ^(.*)$ - [L,R=403]
+
+	############################################################################
+	# PROIBE ACESSO
+	############################################################################
+
+		<Files ~ "^.*\.([Hh][Tt][Aa])">
+			Order Allow,Deny
+			Deny from all
+			Satisfy all
+		</Files>
+
+		<FilesMatch ".(authfn|securepolicy|system_securepolicy|env)$">
+			Order Allow,Deny
+			Deny from all
+			Satisfy all
+		</FilesMatch>
+
+	#############################################################################
+	# FORÇA CODIFICAÇÃO UTF8
+	#############################################################################
+		<FilesMatch ".(htm|html|css|js)$">
+			AddDefaultCharset UTF-8
+		</FilesMatch>
+
+	#############################################################################
+	# DESCOMPACTAÇÃO GZIP
+	#############################################################################
+		AddType text/javascript				.mjs
+		AddType text/css					.css.gzip
+		AddType application/javascript		.js.gzip
+		AddType text/html 					.html.gzip
+		AddType application/x-font-ttf		.ttf.gzip
+		AddType application/x-font-woff		.woff.gzip
+		AddType application/x-font-woff2	.woff2.gzip
+		AddType application/x-font-eot		.eot.gzip
+		AddType application/x-font-svg		.svg.gzip
+
+	#-----------------------------------------------------------------------------------------------
+
+		AddEncoding gzip .gzip
+		<Files *.ttf.gzip>
+		ForceType application/x-font-ttf
+		</Files>
+		<Files *.woff.gzip>
+		ForceType application/x-font-woff
+		</Files>
+		<Files *.woff2.gzip>
+		ForceType application/x-font-woff2
+		</Files>
+		<Files *.eot.gzip>
+		ForceType application/x-font-eot
+		</Files>
+		<Files *.svg.gzip>
+		ForceType application/x-font-svg
+		</Files>
+		<Files *.css.gzip>
+		ForceType text/css
+		</Files>
+		<Files *.js.gzip>
+		ForceType application/javascript
+		</Files>
+		<Files *.html.gzip>
+		ForceType text/html
+		</Files>
+
+	#-----------------------------------------------------------------------------------------------
+
+		Header always append X-Frame-Options 		SAMEORIGIN
+		Header set 			 X-Content-Type-Options nosniff
+		Header set 			 X-XSS-Protection 		"1; mode=block"
+		Header set 			 X-WebKit-CSP 			"policy"
+		Header set 			 Accept-Encoding		"gzip | compress | deflate | br| identity| *"
+		Header set 			 Accept-Encoding		"gzip"
+		Header set 			 Accept-Encoding		"gzip, compress, deflate, br, identity, *"
+		Header set 			 Accept-Encoding		"br;q=1.0, gzip;q=0.8, *;q=0.1"
+
+	#############################################################################
+	#  BLOQUEIA ACESSO AO ARQUIVO .CONF
+	#############################################################################
+		<FilesMatch ".(map|conf|key)$">
+			Order Allow,Deny
+			Deny From All
+			ErrorDocument 403 "<h1>Acesso ilegal detectado</h1><hr><h3>O que esse narizinho curioso quer aqui?</h3>"
+		</FilesMatch>
+
+	############################################################################
+	#	VARIAVEIS DE AMBIENTE
+	############################################################################
+		# SetEnv APPLICATION_ENV development
+
+		# SetEnvIfNoCase Host "(.*)" 				HTTP_MY_REMOTE_HOST=$1
+		# SetEnvIfNoCase Remote_Host "(.*)" 		HTTP_MY_REMOTE_HOST=$1
+		# SetEnvIfNoCase Remote_Addr "(.*)" 		HTTP_MY_REMOTE_ADDR=$1
+		# SetEnvIfNoCase Server_Addr "(.*)"			HTTP_MY_SERVER_ADDR=$1
+		# SetEnvIfNoCase Request_Method "(.*)"		HTTP_MY_REQUEST_METHOD=$1
+		# SetEnvIfNoCase Request_Protocol "(.*)"	HTTP_MY_REQUEST_PROTOCOL=$1
+		# SetEnvIfNoCase Request_URI "(.*)"			HTTP_MY_REQUEST_URI=$1
+
+
+	#############################################################################
+	# URLS DINAMICAS
+	#############################################################################
+	<IfModule mod_rewrite.c>
+		RewriteEngine 	On
+		RewriteCond 	%{REQUEST_METHOD} ^(RMDIR|MKDIR|INDEX|MOVE|TRACE|DELETE|TRACK|PUT|HEAD|OPTIONS|CONNECT)
+  		RewriteRule 	^(.*)$ - [L,R=403]
+
+
+	#########################################################################################
+	# 	CONFIGURAÇÃO DE DEPENDENCIA
+	#########################################################################################
+		RewriteCond %{SCRIPT_FILENAME} !-f
+		RewriteRule ^helpdesk/(.*)			/livehelperchat-master/lhc_web/$1		[L]
+
+	#########################################################################################
+	# 	ARQUIVOS WEBSITE
+	#########################################################################################
+
+		RewriteCond ${FRAMEWORK}/projeto/%{SERVER_NAME}/www/$1 	-f
+		RewriteRule ^(.*)			/projeto/%{SERVER_NAME}/www/$1	[L]
+		RewriteRule ^webview(.*)	/projeto/%{SERVER_NAME}/www/$1	[L]
+
+
+	# # #########################################################################################
+	# # # 	ARQUIVOS TEMPLATE
+	# # #########################################################################################
+		RewriteCond ${FRAMEWORK}/projeto/%{SERVER_NAME}/template/$1 	-f
+		RewriteRule ^template(.*)	/projeto/%{SERVER_NAME}/template/$1	[L]
+
+	# #########################################################################################
+	# # 	ARQUIVOS PROJETO
+	# #########################################################################################
+		RewriteCond ${FRAMEWORK}/projeto/%{SERVER_NAME}/$1 	-f
+		RewriteRule ^project(.*) 	/projeto/%{SERVER_NAME}/$1	[L]
+
+
+	# #########################################################################################
+	# # 	CDN
+	# #########################################################################################
+		RewriteCond  ${FRAMEWORK}/projeto/%{SERVER_NAME}/cdn/$1 	-f
+		RewriteRule ^cdn(.*) 	 /projeto/%{SERVER_NAME}/cdn/$1	[L]
+
+	##########################################################################################
+	## 	URL VIRTUAL
+	##########################################################################################
+		RewriteCond %{SCRIPT_FILENAME} !-f
+		RewriteRule ^setup.php$				setup.php?type=$1 				[L]
+		RewriteCond %{SCRIPT_FILENAME} !-f
+		RewriteRule ^deploy-framework/(.*)	setup.php?type=$1 				[L]
+
+	# #########################################################################################
+	# # 	CONFIGURAÇÃO DE DEPENDENCIA
+	# #########################################################################################
+		RewriteCond %{REQUEST_FILENAME} !-f
+		RewriteRule ^(.*)favicon.ico	icon_star.ico	[L]
+
+	# #########################################################################################
+	# # 	CONFIGURAÇÃO DE DEPENDENCIA
+	# #########################################################################################
+		RewriteCond %{SCRIPT_FILENAME} !-f
+		RewriteRule ^system/cdn/import/(.*)/(.*)	lib/cors/class/cdn.search.php?type=import&lib=$1&v=$2	[L]
+		RewriteRule ^system/cdn/search/(.*) 		lib/cors/class/cdn.search.php?type=search&search=$1		[L]
+		RewriteRule ^system/cdn/verify				lib/cors/class/cdn.search.php?type=verify&verify=true	[L]
+		RewriteRule ^system/cdn 					lib/cors/class/cdn.search.php?type=init					[L]
+
+	##########################################################################################
+	## 	ARQUIVOS TEMPORÁRIOS
+	##########################################################################################
+		RewriteRule ^system/blob/(.*) 						lib/cors/class/blob.php?file=$1		[L]
+
+	##########################################################################################
+	## 	ARQUIVOS TEMPORÁRIOS
+	##########################################################################################
+		RewriteRule ^system/captcha/(.*)/(.*)/(.*)/(.*)/(.*)/(.*)	lib/cors/class/captcha.class.php?qttd=$1&size=$2&hex=$3&entreletras=$4&ang=$5&sobras=$6		[L]
+		RewriteRule ^system/captcha/(.*)/(.*)/(.*)/(.*)/(.*) 		lib/cors/class/captcha.class.php?qttd=$1&size=$2&hex=$3&entreletras=$4&ang=$5				[L]
+		RewriteRule ^system/captcha/(.*)/(.*)/(.*)/(.*)				lib/cors/class/captcha.class.php?qttd=$1&size=$2&hex=$3&entreletras=$4						[L]
+		RewriteRule ^system/captcha/(.*)/(.*)/(.*) 					lib/cors/class/captcha.class.php?qttd=$1&size=$2&hex=$3										[L]
+		RewriteRule ^system/captcha/(.*)/(.*)						lib/cors/class/captcha.class.php?qttd=$1&size=$2											[L]
+		RewriteRule ^system/captcha/(.*) 							lib/cors/class/captcha.class.php?qttd=$1													[L]
+		RewriteRule ^system/captcha 								lib/cors/class/captcha.class.php													[L]
+
+	#########################################################################################
+	# 	PLACEHOLDER IMAGE
+	########################################################################################
+		RewriteCond ${FRAMEWORK}/projeto/%{SERVER_NAME}/www/uploads/$1/$2/$3-lazy.low.svg -f 
+		RewriteRule ^images/(.*)/(.*)/(.*)/(.*)/lazy.low.svg 	projeto/%{SERVER_NAME}/www/uploads/$1/$2/$3-lazy.low.svg	[L]
+		
+		RewriteCond ${FRAMEWORK}/projeto/%{SERVER_NAME}/www/uploads/$1/$2/$3-lazy.svg -f 
+		RewriteRule ^images/(.*)/(.*)/(.*)/(.*)/lazy.svg 		projeto/%{SERVER_NAME}/www/uploads/$1/$2/$3-lazy.svg		[L]
+
+		RewriteCond ${FRAMEWORK}/projeto/%{SERVER_NAME}/www/uploads/$1/$2/$3-lazy.low.svg !-f 
+		RewriteRule ^images/(.*)/(.*)/(.*)/(.*)/lazy.low.svg 	projeto/%{SERVER_NAME}/www/uploads/$1/default/$3-lazy.low.svg	[L]
+		
+		RewriteCond ${FRAMEWORK}/projeto/%{SERVER_NAME}/www/uploads/$1/$2/$3-lazy.svg !-f 
+		RewriteRule ^images/(.*)/(.*)/(.*)/(.*)/lazy.svg 		projeto/%{SERVER_NAME}/www/uploads/$1/default/$3-lazy.svg		[L]
+
+	#########################################################################################
+	# 	IMAGENS DOS UPLOADS
+	########################################################################################
+
+		RewriteCond ${FRAMEWORK}/projeto/%{SERVER_NAME}/www/uploads/$1/$2/$3-$4.jpg -f 
+		RewriteRule ^images/(.*)/(.*)/(.*)/(.*)		projeto/%{SERVER_NAME}/www/uploads/$1/$2/$3-$4.jpg			[L]
+		
+		RewriteCond ${FRAMEWORK}/projeto/%{SERVER_NAME}/www/uploads/$1/$2/$3-$4.png -f 
+		RewriteRule ^images/(.*)/(.*)/(.*)/(.*)		projeto/%{SERVER_NAME}/www/uploads/$1/$2/$3-$4.png			[L]
+
+		RewriteCond ${FRAMEWORK}/projeto/%{SERVER_NAME}/www/uploads/$1/$2/$3-$4.jpg !-f 
+		RewriteRule ^images/(.*)/(.*)/(.*)/(.*)		projeto/%{SERVER_NAME}/www/uploads/$1/default/$3-$4.jpg			[L]
+		
+		RewriteCond ${FRAMEWORK}/projeto/%{SERVER_NAME}/www/uploads/$1/$2/$3-$4.png !-f 
+		RewriteRule ^images/(.*)/(.*)/(.*)/(.*)		projeto/%{SERVER_NAME}/www/uploads/$1/default/$3-$4.png			[L]
+
+	#########################################################################################
+
+		RewriteCond ${FRAMEWORK}/projeto/%{SERVER_NAME}/www/uploads/campanhas/$1/$2 -f 
+		RewriteRule ^video/(.*)/(.*)	projeto/%{SERVER_NAME}/www/uploads/campanhas/$1/$2	[L]
+		
+		RewriteCond ${FRAMEWORK}/projeto/%{SERVER_NAME}/www/uploads/campanhas/$1/$3 -f 
+		RewriteRule ^video/(.*)/(.*)/(.*)	projeto/%{SERVER_NAME}/www/uploads/campanhas/$1/$3	[L]
+
+	#########################################################################################
+	# 	GITHUB
+	#########################################################################################
+	#	RewriteCond ${FRAMEWORK}/projeto/%{SERVER_NAME}/$1 [NC]
+	#	RewriteRule ^github(.*)		https://raw.githubusercontent.com/${CDN_USER}/${CDN_REPO}/$1 [L]
+
+	#########################################################################################
+	# 	PLACEHOLDER IMAGE
+	#########################################################################################
+		RewriteCond %{SCRIPT_FILENAME} !-f
+		RewriteRule ^system/placeholder-img/(.*)/(.*)/(.*)/(.*)/(.*)	cors/placeholder-img/place-img-holder.php?size=$1&bg=$2&color=$3&text=$4&fontsize=$5	[L]
+		RewriteRule ^system/placeholder-img/(.*)/(.*)/(.*)/(.*)			cors/placeholder-img/place-img-holder.php?size=$1&bg=$2&color=$3&text=$4				[L]
+		RewriteRule ^system/placeholder-img/(.*)/(.*)/(.*)				cors/placeholder-img/place-img-holder.php?size=$1&bg=$2&color=$3						[L]
+		RewriteRule ^system/placeholder-img/(.*)/(.*)					cors/placeholder-img/place-img-holder.php?size=$1&bg=$2									[L]
+		RewriteRule ^system/placeholder-img/(.*)		 				cors/placeholder-img/place-img-holder.php?size=$1										[L]
+		RewriteRule ^system/placeholder-img		 						cors/placeholder-img/place-img-holder.php												[L]
+
+
+	#########################################################################################
+		RewriteCond %{SCRIPT_FILENAME} !-f
+		RewriteRule ^system/gzip	/projeto/%{SERVER_NAME}/classes/gzip.class.php [L]
+
+	#########################################################################################
+	# 	CONFIGURAÇÃO DE DEPENDENCIA
+	#########################################################################################
+		RewriteCond %{SCRIPT_FILENAME} !-f
+		RewriteRule ^system/log/(.*)			/cors/log-viewer/$1		[L]
+
+
+	#########################################################################################
+		RewriteCond %{SCRIPT_FILENAME} !-f
+		RewriteRule ^(.*)$ 					index.php		 				[L]
+		# RewriteRule ^(.*)$ 				index.php?debug=%{SERVER_NAME}	[L]
+	</IfModule>
+

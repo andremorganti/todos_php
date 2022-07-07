@@ -5,6 +5,7 @@ services:
     build: .
     volumes:
       - ./app:/var/www/html
+      - ./log/apache:/var/log/apache2
     ports:
       - 9000:80
 
