@@ -1,6 +1,4 @@
 <?= include 'views/layout/header.php'; ?>
-        <?= var_dump($model->rows) ?>
-        <?= $model->rows[0]->id ?>
     <div class="container">
         <h2>Tarefa</h2>
 
@@ -12,24 +10,25 @@
                     </div>
                     <div class="card-body">
                         <form action="/todos/form/save" method="post">
-                            <input type="hidden" name="id" value="<?= $model->rows[0]->id ?>" />
+                            <input type="hidden" name="id" value="<?= $model->rows->id ?>" />
                             <div class="mb-3">
                                 <label for="name" class="control-label" class="form-label">Nome</label>
-                                <input type="text" id="name" name="name" value="<?= $model->rows[0]->name ?>" placeholder="Nome do Todo" required class="form-control">
+                                <input type="text" id="name" name="name" value="<?= $model->rows->name ?>" placeholder="Nome do Todo" required class="form-control">
                             </div>
 
                             <div class="mb-3">
-                                <label for="creation_date" class="form-label" value="<?= $model->rows[0]->creation_date ?>">Data de Criação</label>
-                                <input type="date" id="creation_date" name="creation_date" class="form-control">
+                                <label for="creation_date" class="form-label">Data de Criação</label>
+                                <input type="date" id="creation_date" name="creation_date" class="form-control" value="<?= $model->rows->creation_date ?>">
                             </div>
 
                             <div class="mb-3">
                                 <label for="status" class="control-label" class="form-label">Status</label>
                                 <select name="status" id="status" required class="form-select">
-                                    <option value="Criada" "<?= $model->rows->status == 'Criada' ? 'selected' : ''; ?></option>">Criada</option> >Criado</option>
-                                    <option value="Em Execução">Em execução</option>
-                                    <option value="Atrasada">Atrasada</option>
-                                    <option value="Completada">Completada</option>
+                                    <option value="Criada" <?php  if($model->rows->status == 'Criada') { echo 'selected="selected"'; } ?>>Criada</option>: '';} ?>>Criada</option>
+                                    <option value="Em Execução" <?php if($model->rows->status == 'Em Execução') { 'selected="selected"'; } ?>>Em execução</option>
+                                    <option value="Planejada" <?php if ($model->rows->status == 'Planejada') {echo 'selected="selected"'; } ?>>Planejada</option>
+                                    <option value="Atrasada" <?php if($model->rows->status == 'Atrasada') { echo 'selected="selected"'; } ?>>Atrasada</option>
+                                    <option value="Completada" <?php if($model->rows->status == 'Completada') { echo 'selected="selected"'; } ?>>Completada</option>
                                 </select>
                             </div>
 

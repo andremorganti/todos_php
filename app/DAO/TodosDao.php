@@ -50,7 +50,7 @@ class TodosDAO
         $stmt->bindValue(1, $id);
         $stmt->execute();
 
-        return $stmt->fetchAll(PDO::FETCH_CLASS);        
+        return $stmt->fetchAll(PDO::FETCH_CLASS)[0];        
     }
 
     public function delete(int $id)
