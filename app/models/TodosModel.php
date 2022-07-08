@@ -15,7 +15,12 @@ class TodosModel
 
         $dao = new TodosDao();
 
-        $dao->insert($this);
+        if ($this->id != ''){
+            $dao->update($this);
+        } else {
+            $dao->insert($this);
+        }
+
     }
 
     public function getAllRows()
@@ -27,13 +32,13 @@ class TodosModel
         $this->rows = $dao->select();
     }
 
-    public function getById($id)
+    public function getById(int $id)
     {
         include 'DAO/TodosDao.php';
 
         $dao = new TodosDao();
 
-        $this->rows = $dao->selectById($id);
+        return $dao->selectById($id);
 
     }
 
