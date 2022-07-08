@@ -22,7 +22,7 @@
                         <tr>
                             <td><?= $item->id ?></td>
                             <td><?= $item->name ?></td>
-                            <td><?= $item->creation_date ?></td>
+                            <td><?= date("d/m/Y", strtotime($item->creation_date)) ?></td>
                             <td><?= $item->status ?></td>
                             <td>
                                 <a href="/todos/edit?id=<?= $item->id ?>" class="btn btn-primary">Alterar</a>
