@@ -14,6 +14,10 @@ class TodosController
 
     public static function show()
     {
+        include 'models/TodosModel.php';
+        $model = new TodosModel();
+        $model = $model->getById((int) $_GET['id']);
+
         include 'views/modules/todos/ShowTodo.php';
     }
 
