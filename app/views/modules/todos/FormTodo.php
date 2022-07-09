@@ -1,4 +1,3 @@
-
 <?= include 'views/layout/header.php'; ?>
 
 <div class="container">
