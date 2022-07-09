@@ -1,9 +1,9 @@
-<?= include 'views/layout/header.php'; ?>
+<?php include 'views/layout/header.php'; ?>
 
 <div class="container">
     <h2>Tarefa</h2>
 
-    <div class="row align-items-center justify-content-center">
+    <div class="row  justify-content-center">
         <div class="col-4">
             <div class="card">
                 <div class="card-header">
@@ -33,6 +33,5 @@
         </div>
     </div>
 </div>
-    
 
-<?= include 'views/layout/footer.php'; ?>
+<?php include 'views/layout/footer.php'; ?>
