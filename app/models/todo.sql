@@ -20,12 +20,12 @@ ALTER TABLE `todos`
 COMMIT;
 
 
-INSERT INTO `todos` (`name`, `status`) VALUES ('Tarefa 1', 'Planejada');
+INSERT INTO `todos` (`name`, `status`) VALUES ('Tarefa 1', 'Atrasada');
 INSERT INTO `todos` (`name`, `status`) VALUES ('Tarefa 2', 'Em Execução');
-INSERT INTO `todos` (`name`, `status`) VALUES ('Tarefa 3', 'Planejada');
+INSERT INTO `todos` (`name`, `status`) VALUES ('Tarefa 3', 'Em Execução');
 INSERT INTO `todos` (`name`, `status`) VALUES ('Tarefa 4', 'Planejada');
-INSERT INTO `todos` (`name`, `status`) VALUES ('Tarefa 5', 'Criada');
-INSERT INTO `todos` (`name`, `status`) VALUES ('Tarefa 6', 'Criada');
+INSERT INTO `todos` (`name`, `status`) VALUES ('Tarefa 5', 'Atrasada');
+INSERT INTO `todos` (`name`, `status`) VALUES ('Tarefa 6', 'Atrasada');
 INSERT INTO `todos` (`name`, `status`) VALUES ('Tarefa 7', 'Criada');
 INSERT INTO `todos` (`name`, `status`) VALUES ('Tarefa 8', 'Criada');
 INSERT INTO `todos` (`name`, `status`) VALUES ('Tarefa 9', 'Criada');
