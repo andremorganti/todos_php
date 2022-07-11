@@ -1,4 +1,4 @@
-<?= include 'views/layout/header.php'; ?>
+<?php include 'views/layout/header.php'; ?>
 
 <div class="container">
     <h2>Tarefa</h2>
@@ -45,5 +45,4 @@
     </div>
 </div>
     
-
-<?= include 'views/layout/footer.php'; ?>
+<?php include 'views/layout/footer.php'; ?>

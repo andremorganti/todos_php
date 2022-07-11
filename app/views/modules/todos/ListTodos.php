@@ -13,8 +13,7 @@
                         <th>Tarefa</th>
                         <th>Data de Criação</th>
                         <th>Situação</th>
-                        <th></th>
-                        <th></th>
+                        <th>Ações</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -25,10 +24,15 @@
                             <td><?= date("d/m/Y", strtotime($item->creation_date)) ?></td>
                             <td><?= $item->status ?></td>
                             <td>
-                                <a href="/todos/edit?id=<?= $item->id ?>" class="btn btn-primary">Alterar</a>
-                            </td>
-                            <td>
-                                <a href="/todos/delete?id=<?= $item->id ?>" class="btn btn-danger">Remover</a>
+                                <a href="/todo?id=<?= $item->id ?>" class="btn btn-secondary">
+                                    <i class="bi bi-zoom-in"></i>
+                                </a>
+                                <a href="/todos/edit?id=<?= $item->id ?>" class="btn btn-primary">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                <a href="/todos/delete?id=<?= $item->id ?>" class="btn btn-danger">
+                                    <i class="bi bi-trash"></i>
+                                </a>
                             </td>
                         </tr>
                     <?php endforeach ?>
